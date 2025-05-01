@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.IO;
 
 public class NPCGenerator : MonoBehaviour
 {
@@ -16,7 +17,6 @@ public class NPCGenerator : MonoBehaviour
         "An ex-bandit trying to turn their life around.",
         "A healer with a dark secret."
     };
-
     private string[] plotHooks = {
         "Is searching for a stolen heirloom.",
         "Is secretly working for a rival faction.",
@@ -37,5 +37,21 @@ public class NPCGenerator : MonoBehaviour
         plotHookField.text = newPlotHook;
 
         Debug.Log($"Generated NPC: {newName}, {newDescription}, Hook: {newPlotHook}");
+    }
+
+    public void CopyToClipboard()
+    {
+        string npcText = $"Name: {nameField.text}\nDescription: {descriptionField.text}\nPlot Hook: {plotHookField.text}";
+        GUIUtility.systemCopyBuffer = npcText;
+        Debug.Log("NPC copied to clipboard!");
+    }
+
+    public void DownloadToTxt()
+    {
+        string npcText = $"Name: {nameField.text}\nDescription: {descriptionField.text}\nPlot Hook: {plotHookField.text}";
+        string path = Path.Combine(Application.persistentDataPath, "GeneratedNPC.txt");
+
+        File.WriteAllText(path, npcText);
+        Debug.Log($"NPC saved to {path}");
     }
 }
