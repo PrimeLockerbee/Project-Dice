@@ -8608,6 +8608,7 @@ GameObject:
   - component: {fileID: 1353660730}
   - component: {fileID: 1353660733}
   - component: {fileID: 1353660735}
+  - component: {fileID: 1353660736}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -8676,6 +8677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff8f20ecd3bd6c478c06c2bdb4267de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  markovNameGenerator: {fileID: 1353660736}
   nameField: {fileID: 11862770}
   descriptionField: {fileID: 1703946890}
   plotHookField: {fileID: 997140120}
@@ -8687,6 +8689,22 @@ MonoBehaviour:
   quoteField: {fileID: 1529905849}
   backStoryField: {fileID: 1242853224}
   setup: {fileID: 1353660733}
+--- !u!114 &1353660736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353660729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2065a28ebf37db40855f13151d4deb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seedNamesText: "Arin\r\nBelra\r\nCaelum\r\nDoran\r\nElira\r\nFenric\r\nGavric\r\nHessia\r\nIthran\r\nJorven\r\nKaelis\r\nLiora\r\nMarek\r\nNyra\r\nOrlen\r\nPavrik\r\nQuorra\r\nRendall\r\nSylra\r\nTorren\r\nUlric\r\nVeyra\r\nWendell\r\nXarion\r\nYelna\r\nZorik\r\nThess\r\nBrenna\r\nCador\r\nLuneth\r\nFenn\r\nOrel\r\nSyla\r\nTharn\r\nVindra\r\nKalden\r\nNeris\r\nThalia\r\nGarrik\r\nMelira\r\nZanna\r\nDraven\r\nIsolde\r\nVarrin\r\nSoriel\r\nKorrin\r\nAelric\r\nTessia\r\nBranik\r\nLaziel\r\nNerik\r\nValen\r\nSoren\r\nYvara\r\nKestrel\r\nOriax\r\nDelwyn\r\nKira\r\nJask\r\nMiriel\r\nDrevan\r\nAlira\r\nTaren\r\nOssric\r\nLenna\r\nJaric\r\nSyvra\r\nKellen\r\nVestra\r\nMyric\r\nZaren\r\nBrynn\r\nCalric\r\nElaris\r\nToric\r\nHaleen\r\nSelric\r\nNimira\r\nOrrin\r\nKaera\r\nGrath\r\nVelda\r\nSilar\r\nDorel\r\nMalric\r\nIsen\r\nNira\r\nCorwin\r\nEris\r\nLukan\r\nVaela\r\nRurik\r\nZyra\r\nKyran\r\nAeris\r\nThorne\r\nLiora\r\nVaren\r\nMirek\r\nSaela\r"
+  order: 2
+  minLength: 4
+  maxLength: 10
 --- !u!1001 &1356585020
 PrefabInstance:
   m_ObjectHideFlags: 0
