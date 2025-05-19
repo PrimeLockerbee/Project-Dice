@@ -12,7 +12,7 @@ public class MarkovNameGenerator : MonoBehaviour
     private System.Random random = new System.Random();
     private HashSet<string> generatedNames = new HashSet<string>();
 
-    public int order = 2; // number of characters for the key (2 is a good start)
+    public int order = 2; //Number of characters for the key (2 is a good start)
     public int minLength = 4;
     public int maxLength = 10;
 
@@ -21,17 +21,17 @@ public class MarkovNameGenerator : MonoBehaviour
         BuildMarkovChain(seedNamesText);
     }
 
-    // Build the Markov chain dictionary
+    //Build the Markov chain dictionary
     void BuildMarkovChain(string inputText)
     {
         markovChain.Clear();
 
-        // Split input names by new lines
+        //Split input names by new lines
         string[] names = inputText.Split(new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
 
         foreach (var name in names)
         {
-            string paddedName = "^" + name.ToLower() + "$"; // ^ and $ as start/end markers
+            string paddedName = "^" + name.ToLower() + "$"; //^ and $ as start/end markers
             for (int i = 0; i <= paddedName.Length - order; i++)
             {
                 string key = paddedName.Substring(i, order);
@@ -52,7 +52,7 @@ public class MarkovNameGenerator : MonoBehaviour
         {
             StringBuilder nameBuilder = new StringBuilder();
 
-            // Start with ^ plus random key starting with ^
+            //Start with ^ plus random key starting with ^
             List<string> possibleStarts = new List<string>();
             foreach (var key in markovChain.Keys)
                 if (key.StartsWith("^")) possibleStarts.Add(key);
@@ -64,7 +64,7 @@ public class MarkovNameGenerator : MonoBehaviour
             }
 
             string currentKey = possibleStarts[random.Next(possibleStarts.Count)];
-            nameBuilder.Append(currentKey.Substring(1)); // skip the ^
+            nameBuilder.Append(currentKey.Substring(1)); //Skip the ^
 
             while (true)
             {
@@ -78,7 +78,7 @@ public class MarkovNameGenerator : MonoBehaviour
                     break;
 
                 nameBuilder.Append(nextChar);
-                // shift key by one char and append nextChar
+                //Shift key by one char and append nextChar
                 currentKey = currentKey.Substring(1) + nextChar;
 
                 if (nameBuilder.Length >= maxLength)
@@ -96,7 +96,7 @@ public class MarkovNameGenerator : MonoBehaviour
             attempts++;
         }
 
-        return "NoUniqueName"; // fallback if no unique found after attempts
+        return "NoUniqueName"; //Fallback if no unique found after attempts
     }
 
     private string Capitalize(string s)
