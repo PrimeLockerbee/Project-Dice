@@ -196,6 +196,34 @@ public class NPCGeneratorDATABASEGEN : MonoBehaviour
         Debug.Log("NPC copied to clipboard:\n" + npcText);
     }
 
+    public string CollectAllNPCData()
+    {
+        string npcText = "";
+
+        if (setup.nameToggle.isOn)
+            npcText += $"Name: {nameField.text}\n";
+        if (setup.descriptionToggle.isOn)
+            npcText += $"Description: {descriptionField.text}\n";
+        if (setup.plotHookToggle.isOn)
+            npcText += $"Plot Hook: {plotHookField.text}\n";
+        if (setup.occupationToggle.isOn)
+            npcText += $"Occupation: {occupationField.text}\n";
+        if (setup.appearanceToggle.isOn)
+            npcText += $"Appearance: {appearanceField.text}\n";
+        if (setup.personalityToggle.isOn)
+            npcText += $"Personality: {personalityField.text}\n";
+        if (setup.inventoryToggle.isOn)
+            npcText += $"Inventory: {inventoryField.text}\n";
+        if (setup.quoteToggle.isOn)
+            npcText += $"Quote: \"{quoteField.text}\"\n";
+        if (setup.backstoryToggle.isOn)
+            npcText += $"Backstory: {backStoryField.text}\n";
+        if (setup.statsToggle.isOn)
+            npcText += $"Stats:\n{statsField.text}\n";
+
+        return npcText;
+    }
+
     private IEnumerator ReenableButtonAfterDelay(float seconds)
     {
         yield return new WaitForSeconds(seconds);
