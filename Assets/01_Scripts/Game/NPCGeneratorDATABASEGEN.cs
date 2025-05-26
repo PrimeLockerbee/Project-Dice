@@ -17,6 +17,8 @@ public class NPCGeneratorDATABASEGEN : MonoBehaviour
     public TMP_InputField plotHookField;
     public TMP_InputField statsField;
     public TMP_InputField occupationField;
+    public TMP_InputField raceField;
+    public TMP_InputField alignmentField;
     public TMP_InputField appearanceField;
     public TMP_InputField personalityField;
     public TMP_InputField inventoryField;
@@ -26,11 +28,66 @@ public class NPCGeneratorDATABASEGEN : MonoBehaviour
     [Header("Setup Reference")]
     public GeneratorSetup setup;
 
+    [Header("Lock Toggles")]
+    public Toggle nameLockToggle;
+    public Toggle descriptionLockToggle;
+    public Toggle plotHookLockToggle;
+    public Toggle statsLockToggle;
+    public Toggle occupationLockToggle;
+    public Toggle raceLockToggle;
+    public Toggle alignmentLockToggle;
+    public Toggle appearanceLockToggle;
+    public Toggle personalityLockToggle;
+    public Toggle inventoryLockToggle;
+    public Toggle quoteLockToggle;
+    public Toggle backstoryLockToggle;
+
     private string baseUrl = "https://studenthome.hku.nl/~bradley.vanewijk/get_npc.php";
 
     private string[] statNames = {
         "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"
     };
+
+    private string[] alignmentNames = {
+    "Lawful Good", "Lawful Neutral", "Lawful Evil",
+    "Neutral Good", "Neutral", "Neutral Evil",
+    "Chaotic Good", "Chaotic Neutral", "Chaotic Evil"
+    };
+
+    private string[] raceOptions = {
+    "Dragonborn",
+    "Dwarf (Hill)",
+    "Dwarf (Mountain)",
+    "Elf (Drow)",
+    "Elf (High)",
+    "Elf (Wood)",
+    "Gnome (Forest)",
+    "Gnome (Rock)",
+    "Half-Elf",
+    "Half-Orc",
+    "Halfling (Lightfoot)",
+    "Halfling (Stout)",
+    "Human",
+    "Human (Variant)",
+    "Tiefling",
+    "Aasimar",
+    "Elf (Eladrin)",
+    "Aasimar (Fallen)",
+    "Aasimar (Protector)",
+    "Aasimar (Scourge)",
+    "Bugbear",
+    "Firbolg",
+    "Goblin",
+    "Goliath",
+    "Hobgoblin",
+    "Kenku",
+    "Kobold",
+    "Lizardfolk",
+    "Orc",
+    "Tabaxi",
+    "Triton",
+    "Yuan-Ti Pureblood"
+};
 
     public void GenerateNPC()
     {
@@ -111,33 +168,50 @@ public class NPCGeneratorDATABASEGEN : MonoBehaviour
                     continue;
                 }
 
-                // Assign the fields based on toggles
-                if (setup.nameToggle.isOn)
+                // Assign the fields based on toggles and lock state
+                if (setup.nameToggle.isOn && !nameLockToggle.isOn)
                 {
                     string generatedName = markovNameGenerator.GenerateName();
                     nameField.text = generatedName;
                 }
 
-                if (setup.descriptionToggle.isOn)
+                if (setup.descriptionToggle.isOn && !descriptionLockToggle.isOn)
                     descriptionField.text = npcData.description ?? "";
-                if (setup.plotHookToggle.isOn)
+
+                if (setup.plotHookToggle.isOn && !plotHookLockToggle.isOn)
                     plotHookField.text = npcData.plot_hook ?? "";
-                if (setup.occupationToggle.isOn)
+
+                if (setup.occupationToggle.isOn && !occupationLockToggle.isOn)
                     occupationField.text = npcData.occupation ?? "";
-                if (setup.appearanceToggle.isOn)
+
+                if (setup.appearanceToggle.isOn && !appearanceLockToggle.isOn)
                     appearanceField.text = npcData.appearance ?? "";
-                if (setup.personalityToggle.isOn)
+
+                if (setup.personalityToggle.isOn && !personalityLockToggle.isOn)
                     personalityField.text = npcData.personality ?? "";
-                if (setup.inventoryToggle.isOn)
+
+                if (setup.inventoryToggle.isOn && !inventoryLockToggle.isOn)
                     inventoryField.text = npcData.inventory ?? "";
-                if (setup.quoteToggle.isOn)
+
+                if (setup.quoteToggle.isOn && !quoteLockToggle.isOn)
                     quoteField.text = npcData.quote ?? "";
-                if (setup.backstoryToggle.isOn)
+
+                if (setup.backstoryToggle.isOn && !backstoryLockToggle.isOn)
                     backStoryField.text = npcData.backstory ?? "";
 
-                if (setup.statsToggle.isOn)
-                {
+                if (setup.statsToggle.isOn && !statsLockToggle.isOn)
                     statsField.text = GenerateRandomStats();
+
+                if (setup.raceToggle.isOn && !raceLockToggle.isOn)
+                    raceField.text = GenerateRandomRace();
+
+                if (setup.alignmentToggle.isOn && !alignmentLockToggle.isOn)
+                    alignmentField.text = GenerateRandomAlignment();
+
+
+                if (setup.raceToggle.isOn)
+                {
+                    raceField.text = GenerateRandomRace();
                 }
 
                 yield break; // success, exit coroutine
@@ -167,6 +241,18 @@ public class NPCGeneratorDATABASEGEN : MonoBehaviour
         return $"{leftStats}\n{rightStats}";
     }
 
+    private string GenerateRandomAlignment()
+    {
+        int index = Random.Range(0, alignmentNames.Length);
+        return alignmentNames[index];
+    }
+
+    private string GenerateRandomRace()
+    {
+        int index = Random.Range(0, raceOptions.Length);
+        return raceOptions[index];
+    }
+
     public void CopyAllNPCFieldsToClipboard()
     {
         string npcText = "";
@@ -191,6 +277,10 @@ public class NPCGeneratorDATABASEGEN : MonoBehaviour
             npcText += $"Backstory: {backStoryField.text}\n";
         if (setup.statsToggle.isOn)
             npcText += $"Stats:\n{statsField.text}\n";
+        if (setup.alignmentToggle.isOn)
+            npcText += $"Alignment:\n{alignmentField.text}\n";
+        if (setup.raceToggle.isOn)
+            npcText += $"Race:\n{raceField.text}\n";
 
         GUIUtility.systemCopyBuffer = npcText;
         Debug.Log("NPC copied to clipboard:\n" + npcText);
@@ -220,6 +310,10 @@ public class NPCGeneratorDATABASEGEN : MonoBehaviour
             npcText += $"Backstory: {backStoryField.text}\n";
         if (setup.statsToggle.isOn)
             npcText += $"Stats:\n{statsField.text}\n";
+        if (setup.alignmentToggle.isOn)
+            npcText += $"Alignment:\n{alignmentField.text}\n";
+        if (setup.raceToggle.isOn)
+            npcText += $"Race:\n{raceField.text}\n";
 
         return npcText;
     }

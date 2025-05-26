@@ -3092,7 +3092,7 @@ TextureImporter:
         width: 172
         height: 34
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -3109,12 +3109,12 @@ TextureImporter:
       name: MediavelFree_135
       rect:
         serializedVersion: 2
-        x: 401
-        y: 65
+        x: 403
+        y: 37
         width: 64
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -3131,12 +3131,12 @@ TextureImporter:
       name: MediavelFree_136
       rect:
         serializedVersion: 2
-        x: 401
-        y: 37
+        x: 403
+        y: 53
         width: 64
         height: 27
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -3158,7 +3158,7 @@ TextureImporter:
         width: 79
         height: 22
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -3167,6 +3167,138 @@ TextureImporter:
       bones: []
       spriteID: 592d9de7b29f84e459df2891dc2699ce
       internalID: 617097590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MediavelFree_138
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 31
+        width: 79
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa4e0bf9c9d7aee4182a988e69475a94
+      internalID: -1322337572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MediavelFree_139
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 8
+        width: 54
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c7d8de70ea35cf439dbafe55a75e414
+      internalID: -106384924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MediavelFree_140
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 256
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f250da84e4950df4b85ed1a1d5519c79
+      internalID: 1936147591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MediavelFree_141
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 128
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47096cfddaac0e441affbfe5ebedbfe7
+      internalID: 152679482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MediavelFree_142
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 117
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e04e33458705fd44f9fdcae159d4145b
+      internalID: -41146944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MediavelFree_143
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 117
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6457d8efde9e03745ad0162872138ff7
+      internalID: -35613283
       vertices: []
       indices: 
       edges: []
@@ -3229,7 +3361,13 @@ TextureImporter:
       MediavelFree_135: -1655518905
       MediavelFree_136: -404596444
       MediavelFree_137: 617097590
+      MediavelFree_138: -1322337572
+      MediavelFree_139: -106384924
       MediavelFree_14: -1228251779
+      MediavelFree_140: 1936147591
+      MediavelFree_141: 152679482
+      MediavelFree_142: -41146944
+      MediavelFree_143: -35613283
       MediavelFree_15: 1313425174
       MediavelFree_16: 1990423014
       MediavelFree_17: 1794136668

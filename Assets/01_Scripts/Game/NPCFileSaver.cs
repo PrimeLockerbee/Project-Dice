@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.IO;
-using SFB; // Standalone File Browser namespace
+using SFB; // Standalone File Browser
+using System.Collections.Generic;
 
 public class NPCFileSaver : MonoBehaviour
 {
@@ -10,13 +11,8 @@ public class NPCFileSaver : MonoBehaviour
     {
         string npcText = npcGenerator.CollectAllNPCData();
 
-        // Open a file save dialog
         var path = StandaloneFileBrowser.SaveFilePanel(
-            "Save NPC as TXT",    // Title
-            "",                   // Default path
-            "Generated_NPC",      // Default filename
-            "txt"                 // Extension
-        );
+            "Save NPC as TXT", "", "Generated_NPC", "txt");
 
         if (!string.IsNullOrEmpty(path))
         {

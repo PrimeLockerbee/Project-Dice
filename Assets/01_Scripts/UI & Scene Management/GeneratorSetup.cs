@@ -10,6 +10,8 @@ public class GeneratorSetup : MonoBehaviour
     public Toggle plotHookToggle;
     public Toggle statsToggle;
     public Toggle occupationToggle;
+    public Toggle raceToggle;
+    public Toggle alignmentToggle;
     public Toggle appearanceToggle;
     public Toggle personalityToggle;
     public Toggle inventoryToggle;
@@ -22,6 +24,8 @@ public class GeneratorSetup : MonoBehaviour
     public GameObject plotHookInputField;
     public GameObject statsInputField;
     public GameObject occupationInputField;
+    public GameObject raceInputField;
+    public GameObject alignmentInputField;
     public GameObject appearanceInputField;
     public GameObject personalityInputField;
     public GameObject inventoryInputField;
@@ -42,6 +46,8 @@ public class GeneratorSetup : MonoBehaviour
             { plotHookToggle, plotHookInputField },
             { statsToggle, statsInputField },
             { occupationToggle, occupationInputField },
+            { raceToggle, raceInputField },
+            { alignmentToggle, alignmentInputField },
             { appearanceToggle, appearanceInputField },
             { personalityToggle, personalityInputField },
             { inventoryToggle, inventoryInputField },
