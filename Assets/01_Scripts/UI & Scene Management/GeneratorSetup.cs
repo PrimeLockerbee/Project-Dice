@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class GeneratorSetup : MonoBehaviour
 {
+    [Header("Controls")]
+    public Button continueButton;
+
     [Header("Toggle Inputs (Setup Panel)")]
     public Toggle nameToggle;
     public Toggle descriptionToggle;
@@ -41,23 +44,42 @@ public class GeneratorSetup : MonoBehaviour
     void Start()
     {
         toggleToInputField = new Dictionary<Toggle, GameObject> {
-            { nameToggle, nameInputField },
-            { descriptionToggle, descriptionInputField },
-            { plotHookToggle, plotHookInputField },
-            { statsToggle, statsInputField },
-            { occupationToggle, occupationInputField },
-            { raceToggle, raceInputField },
-            { alignmentToggle, alignmentInputField },
-            { appearanceToggle, appearanceInputField },
-            { personalityToggle, personalityInputField },
-            { inventoryToggle, inventoryInputField },
-            { quoteToggle, quoteInputField },
-            { backstoryToggle, backstoryInputField }
+        { nameToggle, nameInputField },
+        { descriptionToggle, descriptionInputField },
+        { plotHookToggle, plotHookInputField },
+        { statsToggle, statsInputField },
+        { occupationToggle, occupationInputField },
+        { raceToggle, raceInputField },
+        { alignmentToggle, alignmentInputField },
+        { appearanceToggle, appearanceInputField },
+        { personalityToggle, personalityInputField },
+        { inventoryToggle, inventoryInputField },
+        { quoteToggle, quoteInputField },
+        { backstoryToggle, backstoryInputField }
         };
 
-        // Make sure the generator panel is hidden at start
-        generatorPanel.SetActive(false);
+        // Clear any previous listeners to avoid duplicates
+        foreach (var toggle in toggleToInputField.Keys)
+        {
+            toggle.onValueChanged.RemoveAllListeners();
+
+            toggle.onValueChanged.AddListener((isOn) =>
+            {
+                // Show or hide the linked input field based on toggle
+                toggleToInputField[toggle].SetActive(isOn);
+
+                // Update the continue button's interactability
+                UpdateContinueButton();
+            });
+
+            // Initialize input field visibility based on toggle state
+            toggleToInputField[toggle].SetActive(toggle.isOn);
+        }
+
+        // Set continue button interactability on startup
+        UpdateContinueButton();
     }
+
 
     public void OnContinue()
     {
@@ -72,5 +94,19 @@ public class GeneratorSetup : MonoBehaviour
         {
             pair.Value.SetActive(pair.Key.isOn);
         }
+    }
+
+    void UpdateContinueButton()
+    {
+        bool anyToggleOn = false;
+        foreach (var toggle in toggleToInputField.Keys)
+        {
+            if (toggle.isOn)
+            {
+                anyToggleOn = true;
+                break;
+            }
+        }
+        continueButton.interactable = anyToggleOn;
     }
 }

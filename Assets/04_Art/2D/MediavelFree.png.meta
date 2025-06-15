@@ -3268,7 +3268,7 @@ TextureImporter:
         width: 8
         height: 10
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -3290,7 +3290,7 @@ TextureImporter:
         width: 8
         height: 10
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -3299,6 +3299,28 @@ TextureImporter:
       bones: []
       spriteID: 6457d8efde9e03745ad0162872138ff7
       internalID: -35613283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MediavelFree_144
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 131
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bf8eceb1aed8ca4899cf94ab5cce146
+      internalID: -125045773
       vertices: []
       indices: 
       edges: []
@@ -3368,6 +3390,7 @@ TextureImporter:
       MediavelFree_141: 152679482
       MediavelFree_142: -41146944
       MediavelFree_143: -35613283
+      MediavelFree_144: -125045773
       MediavelFree_15: 1313425174
       MediavelFree_16: 1990423014
       MediavelFree_17: 1794136668
