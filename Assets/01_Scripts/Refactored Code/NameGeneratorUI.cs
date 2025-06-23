@@ -12,6 +12,8 @@ public class NameGeneratorUI : MonoBehaviour
 
     public Toggle lockNameToggle;
 
+    public GeneratorSetup generatorSetup; // Assign in inspector
+
     private void Start()
     {
         var names = trainingData.text.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
@@ -22,9 +24,18 @@ public class NameGeneratorUI : MonoBehaviour
     public void GenerateName()
     {
         if (generator == null) return;
+
+        // Only generate if name toggle is ON in the setup
+        if (!generatorSetup.nameToggle.isOn)
+        {
+            nameInputField.text = ""; // Optionally clear if not generating
+            return;
+        }
+
         string name = generator.Generate(10);
 
         if (!lockNameToggle.isOn)
             nameInputField.text = name;
     }
+
 }

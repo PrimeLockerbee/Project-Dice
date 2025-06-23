@@ -15,6 +15,8 @@ public class LocalNpcGenerator : MonoBehaviour
     public Toggle lockAlignmentToggle;
     public Toggle lockStatsToggle;
 
+    public GeneratorSetup generatorSetup; // Assign in inspector
+
     private List<string> races = new List<string>
     {
         "Human", "Elf", "Dwarf", "Orc", "Halfling", "Gnome", "Dragonborn", "Tiefling"
@@ -63,8 +65,16 @@ public class LocalNpcGenerator : MonoBehaviour
 
     public void GenerateAll()
     {
-        GenerateRace();
-        GenerateAlignment();
-        GenerateStats();
+        if (generatorSetup.raceToggle.isOn)
+            GenerateRace();
+        else raceInput.text = "";
+
+        if (generatorSetup.alignmentToggle.isOn)
+            GenerateAlignment();
+        else alignmentInput.text = "";
+
+        if (generatorSetup.statsToggle.isOn)
+            GenerateStats();
+        else statsInput.text = "";
     }
 }

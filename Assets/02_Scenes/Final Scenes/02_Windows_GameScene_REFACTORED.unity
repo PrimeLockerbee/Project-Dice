@@ -1095,6 +1095,7 @@ MonoBehaviour:
   nameInputField: {fileID: 3116805382149917158}
   trainingData: {fileID: 4900000, guid: bdd8fa776039d1e4bb08a26bec7faed0, type: 3}
   lockNameToggle: {fileID: 2435012785757756602}
+  generatorSetup: {fileID: 1660645373}
 --- !u!1 &775671795
 GameObject:
   m_ObjectHideFlags: 0
@@ -2552,6 +2553,7 @@ MonoBehaviour:
   lockRaceToggle: {fileID: 4706025722085861185}
   lockAlignmentToggle: {fileID: 7063162263880890318}
   lockStatsToggle: {fileID: 1469243027101277797}
+  generatorSetup: {fileID: 1660645373}
 --- !u!1 &1635051185
 GameObject:
   m_ObjectHideFlags: 0
@@ -3033,7 +3035,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 9214998160937432518}
+      - m_Target: {fileID: 2093370984}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
