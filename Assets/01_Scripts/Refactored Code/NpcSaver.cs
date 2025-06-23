@@ -123,11 +123,11 @@ public class NpcSaver : MonoBehaviour
         {
             using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                // Set custom margins: left, right, top, bottom (in points; 72 = 1 inch)
+                // Set margins: left, right, top, bottom
                 var doc = new Document(PageSize.A4, 80f, 80f, 185f, 100f);
                 var writer = PdfWriter.GetInstance(doc, fs);
 
-                // Add scroll background if available
+                // Add scroll background
                 string backgroundPath = Path.Combine(Application.streamingAssetsPath, "PDFBackground.png");
                 if (File.Exists(backgroundPath))
                 {
@@ -136,12 +136,25 @@ public class NpcSaver : MonoBehaviour
 
                 doc.Open();
 
-                var font = FontFactory.GetFont("Arial", 12, iTextSharp.text.Font.NORMAL);
+                // Load custom TTF font
+                string fontPath = Path.Combine(Application.streamingAssetsPath, "FantaisieArtistique.ttf");
+                iTextSharp.text.Font fancyFont;
+
+                if (File.Exists(fontPath))
+                {
+                    BaseFont baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                    fancyFont = new iTextSharp.text.Font(baseFont, 12);
+                }
+                else
+                {
+                    Debug.LogWarning("Custom font not found, falling back to Arial.");
+                    fancyFont = FontFactory.GetFont("Arial", 12, iTextSharp.text.Font.NORMAL);
+                }
 
                 void AddPdfParagraph(string label, string value)
                 {
                     if (!string.IsNullOrWhiteSpace(value))
-                        doc.Add(new Paragraph($"{label}: {value}", font));
+                        doc.Add(new Paragraph($"{label}: {value}", fancyFont));
                 }
 
                 AddPdfParagraph("Name", npc.name);
