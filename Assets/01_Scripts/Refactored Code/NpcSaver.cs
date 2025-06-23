@@ -5,6 +5,8 @@ using System.Text;
 using SFB;
 using System;
 using System.Collections;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 public class NpcSaver : MonoBehaviour
 {
@@ -35,7 +37,6 @@ public class NpcSaver : MonoBehaviour
         }
     }
 
-    // Local NPC data class (independent of NpcApiClient)
     [System.Serializable]
     public class NpcData
     {
@@ -53,7 +54,6 @@ public class NpcSaver : MonoBehaviour
         public string backstory;
     }
 
-    // Save as JSON to default folder (same as before)
     public void SaveAsJson()
     {
         var npc = CollectNpcData();
@@ -66,17 +66,16 @@ public class NpcSaver : MonoBehaviour
         Debug.Log($"NPC saved to: {fullPath}");
     }
 
-    // Save as TXT with field names, with save dialog to choose folder and name
     public void SaveNpcWithFileDialog()
     {
         var npc = CollectNpcData();
 
         var extensions = new[] {
-        new ExtensionFilter("Text or PDF", "txt", "pdf"),
-        new ExtensionFilter("Text Files", "txt"),
-        new ExtensionFilter("PDF Files", "pdf"),
-        new ExtensionFilter("All Files", "*")
-    };
+            new ExtensionFilter("Text or PDF", "txt", "pdf"),
+            new ExtensionFilter("Text Files", "txt"),
+            new ExtensionFilter("PDF Files", "pdf"),
+            new ExtensionFilter("All Files", "*")
+        };
 
         string defaultName = $"npc_{System.DateTime.Now:yyyyMMdd_HHmmss}";
         string path = StandaloneFileBrowser.SaveFilePanel("Save NPC", saveFolder, defaultName, extensions);
@@ -89,7 +88,7 @@ public class NpcSaver : MonoBehaviour
             }
             else if (path.EndsWith(".pdf"))
             {
-                SaveNpcAsPdf(npc, path); // ⬅️ You'll define this in step 2
+                SaveNpcAsPdf(npc, path);
             }
             else
             {
@@ -120,22 +119,29 @@ public class NpcSaver : MonoBehaviour
 
     private void SaveNpcAsPdf(NpcData npc, string path)
     {
-        // This assumes you’ve imported iTextSharp or another PDF library correctly
-        // Replace this with your own working implementation
         try
         {
             using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                var doc = new iTextSharp.text.Document();
-                var writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, fs);
+                // Set custom margins: left, right, top, bottom (in points; 72 = 1 inch)
+                var doc = new Document(PageSize.A4, 80f, 80f, 185f, 100f);
+                var writer = PdfWriter.GetInstance(doc, fs);
+
+                // Add scroll background if available
+                string backgroundPath = Path.Combine(Application.streamingAssetsPath, "PDFBackground.png");
+                if (File.Exists(backgroundPath))
+                {
+                    writer.PageEvent = new ScrollBackground(backgroundPath);
+                }
+
                 doc.Open();
 
-                var font = iTextSharp.text.FontFactory.GetFont("Arial", 12, iTextSharp.text.Font.NORMAL);
+                var font = FontFactory.GetFont("Arial", 12, iTextSharp.text.Font.NORMAL);
 
                 void AddPdfParagraph(string label, string value)
                 {
                     if (!string.IsNullOrWhiteSpace(value))
-                        doc.Add(new iTextSharp.text.Paragraph($"{label}: {value}", font));
+                        doc.Add(new Paragraph($"{label}: {value}", font));
                 }
 
                 AddPdfParagraph("Name", npc.name);
@@ -160,8 +166,6 @@ public class NpcSaver : MonoBehaviour
             Debug.LogError($"PDF save failed: {ex.Message}");
         }
     }
-
-
 
     private void AppendField(StringBuilder sb, string fieldName, string value)
     {
@@ -190,12 +194,10 @@ public class NpcSaver : MonoBehaviour
         };
     }
 
-    // Call this from outside to save JSON after a delay (e.g. after generation)
     public IEnumerator SaveJsonAfterDelay(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         SaveAsJson();
         historyPanel.LoadRecentNpcButtons();
     }
-
 }
