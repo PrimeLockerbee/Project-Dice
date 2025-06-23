@@ -1,39 +1,24 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
 
 public class GeneratorSetup : MonoBehaviour
 {
     [Header("Controls")]
     public Button continueButton;
 
-    [Header("Toggle Inputs (Setup Panel)")]
-    public Toggle nameToggle;
-    public Toggle descriptionToggle;
-    public Toggle plotHookToggle;
-    public Toggle statsToggle;
-    public Toggle occupationToggle;
-    public Toggle raceToggle;
-    public Toggle alignmentToggle;
-    public Toggle appearanceToggle;
-    public Toggle personalityToggle;
-    public Toggle inventoryToggle;
-    public Toggle quoteToggle;
-    public Toggle backstoryToggle;
+    [Header("Toggle Inputs")]
+    public Toggle nameToggle, descriptionToggle, plotHookToggle, statsToggle;
+    public Toggle occupationToggle, raceToggle, alignmentToggle;
+    public Toggle appearanceToggle, personalityToggle, inventoryToggle;
+    public Toggle quoteToggle, backstoryToggle;
 
-    [Header("InputFields (Generator Panel)")]
-    public GameObject nameInputField;
-    public GameObject descriptionInputField;
-    public GameObject plotHookInputField;
-    public GameObject statsInputField;
-    public GameObject occupationInputField;
-    public GameObject raceInputField;
-    public GameObject alignmentInputField;
-    public GameObject appearanceInputField;
-    public GameObject personalityInputField;
-    public GameObject inventoryInputField;
-    public GameObject quoteInputField;
-    public GameObject backstoryInputField;
+    [Header("InputFields")]
+    public GameObject nameInputField, descriptionInputField, plotHookInputField, statsInputField;
+    public GameObject occupationInputField, raceInputField, alignmentInputField;
+    public GameObject appearanceInputField, personalityInputField, inventoryInputField;
+    public GameObject quoteInputField, backstoryInputField;
 
     [Header("Panels")]
     public GameObject setupPanel;
@@ -44,52 +29,40 @@ public class GeneratorSetup : MonoBehaviour
     void Start()
     {
         toggleToInputField = new Dictionary<Toggle, GameObject> {
-        { nameToggle, nameInputField },
-        { descriptionToggle, descriptionInputField },
-        { plotHookToggle, plotHookInputField },
-        { statsToggle, statsInputField },
-        { occupationToggle, occupationInputField },
-        { raceToggle, raceInputField },
-        { alignmentToggle, alignmentInputField },
-        { appearanceToggle, appearanceInputField },
-        { personalityToggle, personalityInputField },
-        { inventoryToggle, inventoryInputField },
-        { quoteToggle, quoteInputField },
-        { backstoryToggle, backstoryInputField }
+            { nameToggle, nameInputField },
+            { descriptionToggle, descriptionInputField },
+            { plotHookToggle, plotHookInputField },
+            { statsToggle, statsInputField },
+            { occupationToggle, occupationInputField },
+            { raceToggle, raceInputField },
+            { alignmentToggle, alignmentInputField },
+            { appearanceToggle, appearanceInputField },
+            { personalityToggle, personalityInputField },
+            { inventoryToggle, inventoryInputField },
+            { quoteToggle, quoteInputField },
+            { backstoryToggle, backstoryInputField }
         };
 
-        // Clear any previous listeners to avoid duplicates
         foreach (var toggle in toggleToInputField.Keys)
         {
             toggle.onValueChanged.RemoveAllListeners();
-
             toggle.onValueChanged.AddListener((isOn) =>
             {
-                // Show or hide the linked input field based on toggle
                 toggleToInputField[toggle].SetActive(isOn);
-
-                // Update the continue button's interactability
                 UpdateContinueButton();
             });
 
-            // Initialize input field visibility based on toggle state
             toggleToInputField[toggle].SetActive(toggle.isOn);
         }
 
-        // Set continue button interactability on startup
         UpdateContinueButton();
     }
 
-
     public void OnContinue()
     {
-        // Hide setup panel
         setupPanel.SetActive(false);
-
-        // Show generator panel
         generatorPanel.SetActive(true);
 
-        // Enable or disable InputFields based on toggle state
         foreach (var pair in toggleToInputField)
         {
             pair.Value.SetActive(pair.Key.isOn);
@@ -98,41 +71,25 @@ public class GeneratorSetup : MonoBehaviour
 
     void UpdateContinueButton()
     {
-        bool anyToggleOn = false;
-        foreach (var toggle in toggleToInputField.Keys)
-        {
-            if (toggle.isOn)
-            {
-                anyToggleOn = true;
-                break;
-            }
-        }
-        continueButton.interactable = anyToggleOn;
+        bool anyOn = toggleToInputField.Keys.Any(t => t.isOn);
+        continueButton.interactable = anyOn;
     }
 
-    public void ApplyFieldTogglesFromNpc(NpcApiClient.NpcData npc)
+    public void ApplyFieldTogglesFromNpc(NpcData npc)
     {
-        nameToggle.isOn = !string.IsNullOrWhiteSpace(npc.name);
-        descriptionToggle.isOn = !string.IsNullOrWhiteSpace(npc.description);
-        plotHookToggle.isOn = !string.IsNullOrWhiteSpace(npc.plot_hook);
-        statsToggle.isOn = !string.IsNullOrWhiteSpace(npc.stats);
-        occupationToggle.isOn = !string.IsNullOrWhiteSpace(npc.occupation);
-        raceToggle.isOn = !string.IsNullOrWhiteSpace(npc.race);
-        alignmentToggle.isOn = !string.IsNullOrWhiteSpace(npc.alignment);
-        appearanceToggle.isOn = !string.IsNullOrWhiteSpace(npc.appearance);
-        personalityToggle.isOn = !string.IsNullOrWhiteSpace(npc.personality);
-        inventoryToggle.isOn = !string.IsNullOrWhiteSpace(npc.inventory);
-        quoteToggle.isOn = !string.IsNullOrWhiteSpace(npc.quote);
-        backstoryToggle.isOn = !string.IsNullOrWhiteSpace(npc.backstory);
+        var fields = new HashSet<string>(npc.generatedFields);
 
-        // Force-refresh input fields visibility
-        foreach (var pair in toggleToInputField)
-        {
-            pair.Value.SetActive(pair.Key.isOn);
-        }
-
-        // Update continue button just in case
-        UpdateContinueButton();
+        nameToggle.isOn = fields.Contains("name");
+        descriptionToggle.isOn = fields.Contains("description");
+        plotHookToggle.isOn = fields.Contains("plot_hook");
+        occupationToggle.isOn = fields.Contains("occupation");
+        raceToggle.isOn = fields.Contains("race");
+        alignmentToggle.isOn = fields.Contains("alignment");
+        statsToggle.isOn = fields.Contains("stats");
+        appearanceToggle.isOn = fields.Contains("appearance");
+        personalityToggle.isOn = fields.Contains("personality");
+        inventoryToggle.isOn = fields.Contains("inventory");
+        quoteToggle.isOn = fields.Contains("quote");
+        backstoryToggle.isOn = fields.Contains("backstory");
     }
-
 }
