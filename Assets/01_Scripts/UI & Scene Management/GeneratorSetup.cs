@@ -109,4 +109,30 @@ public class GeneratorSetup : MonoBehaviour
         }
         continueButton.interactable = anyToggleOn;
     }
+
+    public void ApplyFieldTogglesFromNpc(NpcApiClient.NpcData npc)
+    {
+        nameToggle.isOn = !string.IsNullOrWhiteSpace(npc.name);
+        descriptionToggle.isOn = !string.IsNullOrWhiteSpace(npc.description);
+        plotHookToggle.isOn = !string.IsNullOrWhiteSpace(npc.plot_hook);
+        statsToggle.isOn = !string.IsNullOrWhiteSpace(npc.stats);
+        occupationToggle.isOn = !string.IsNullOrWhiteSpace(npc.occupation);
+        raceToggle.isOn = !string.IsNullOrWhiteSpace(npc.race);
+        alignmentToggle.isOn = !string.IsNullOrWhiteSpace(npc.alignment);
+        appearanceToggle.isOn = !string.IsNullOrWhiteSpace(npc.appearance);
+        personalityToggle.isOn = !string.IsNullOrWhiteSpace(npc.personality);
+        inventoryToggle.isOn = !string.IsNullOrWhiteSpace(npc.inventory);
+        quoteToggle.isOn = !string.IsNullOrWhiteSpace(npc.quote);
+        backstoryToggle.isOn = !string.IsNullOrWhiteSpace(npc.backstory);
+
+        // Force-refresh input fields visibility
+        foreach (var pair in toggleToInputField)
+        {
+            pair.Value.SetActive(pair.Key.isOn);
+        }
+
+        // Update continue button just in case
+        UpdateContinueButton();
+    }
+
 }

@@ -1,8 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using System.IO;
 using System.Text;
 using SFB;
+using System;
+using System.Collections;
 
 public class NpcSaver : MonoBehaviour
 {
@@ -21,6 +23,8 @@ public class NpcSaver : MonoBehaviour
     public TMP_InputField backstoryInput;
 
     private string saveFolder;
+
+    public NpcHistoryPanel historyPanel;
 
     private void Awake()
     {
@@ -63,10 +67,39 @@ public class NpcSaver : MonoBehaviour
     }
 
     // Save as TXT with field names, with save dialog to choose folder and name
-    public void SaveAsTxt()
+    public void SaveNpcWithFileDialog()
     {
         var npc = CollectNpcData();
 
+        var extensions = new[] {
+        new ExtensionFilter("Text or PDF", "txt", "pdf"),
+        new ExtensionFilter("Text Files", "txt"),
+        new ExtensionFilter("PDF Files", "pdf"),
+        new ExtensionFilter("All Files", "*")
+    };
+
+        string defaultName = $"npc_{System.DateTime.Now:yyyyMMdd_HHmmss}";
+        string path = StandaloneFileBrowser.SaveFilePanel("Save NPC", saveFolder, defaultName, extensions);
+
+        if (!string.IsNullOrEmpty(path))
+        {
+            if (path.EndsWith(".txt"))
+            {
+                SaveNpcAsTxt(npc, path);
+            }
+            else if (path.EndsWith(".pdf"))
+            {
+                SaveNpcAsPdf(npc, path); // ⬅️ You'll define this in step 2
+            }
+            else
+            {
+                Debug.LogWarning("Unsupported file type.");
+            }
+        }
+    }
+
+    private void SaveNpcAsTxt(NpcData npc, string path)
+    {
         var sb = new StringBuilder();
         AppendField(sb, "Name", npc.name);
         AppendField(sb, "Description", npc.description);
@@ -81,23 +114,54 @@ public class NpcSaver : MonoBehaviour
         AppendField(sb, "Quote", npc.quote);
         AppendField(sb, "Backstory", npc.backstory);
 
-        var extensions = new[] {
-            new ExtensionFilter("Text Files", "txt"),
-            new ExtensionFilter("All Files", "*")
-        };
+        File.WriteAllText(path, sb.ToString());
+        Debug.Log($"NPC saved as TXT to: {path}");
+    }
 
-        string path = StandaloneFileBrowser.SaveFilePanel("Save NPC as TXT", saveFolder, $"npc_{System.DateTime.Now:yyyyMMdd_HHmmss}.txt", extensions);
-
-        if (!string.IsNullOrEmpty(path))
+    private void SaveNpcAsPdf(NpcData npc, string path)
+    {
+        // This assumes you’ve imported iTextSharp or another PDF library correctly
+        // Replace this with your own working implementation
+        try
         {
-            File.WriteAllText(path, sb.ToString());
-            Debug.Log($"NPC saved as TXT to: {path}");
+            using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                var doc = new iTextSharp.text.Document();
+                var writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, fs);
+                doc.Open();
+
+                var font = iTextSharp.text.FontFactory.GetFont("Arial", 12, iTextSharp.text.Font.NORMAL);
+
+                void AddPdfParagraph(string label, string value)
+                {
+                    if (!string.IsNullOrWhiteSpace(value))
+                        doc.Add(new iTextSharp.text.Paragraph($"{label}: {value}", font));
+                }
+
+                AddPdfParagraph("Name", npc.name);
+                AddPdfParagraph("Description", npc.description);
+                AddPdfParagraph("Plot Hook", npc.plot_hook);
+                AddPdfParagraph("Occupation", npc.occupation);
+                AddPdfParagraph("Race", npc.race);
+                AddPdfParagraph("Alignment", npc.alignment);
+                AddPdfParagraph("Stats", npc.stats);
+                AddPdfParagraph("Appearance", npc.appearance);
+                AddPdfParagraph("Personality", npc.personality);
+                AddPdfParagraph("Inventory", npc.inventory);
+                AddPdfParagraph("Quote", npc.quote);
+                AddPdfParagraph("Backstory", npc.backstory);
+
+                doc.Close();
+                Debug.Log($"NPC saved as PDF to: {path}");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Debug.Log("Save cancelled or failed.");
+            Debug.LogError($"PDF save failed: {ex.Message}");
         }
     }
+
+
 
     private void AppendField(StringBuilder sb, string fieldName, string value)
     {
@@ -125,4 +189,13 @@ public class NpcSaver : MonoBehaviour
             backstory = backstoryInput?.text
         };
     }
+
+    // Call this from outside to save JSON after a delay (e.g. after generation)
+    public IEnumerator SaveJsonAfterDelay(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        SaveAsJson();
+        historyPanel.LoadRecentNpcButtons();
+    }
+
 }

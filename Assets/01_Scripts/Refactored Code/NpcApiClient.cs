@@ -14,6 +14,10 @@ public class NpcApiClient : MonoBehaviour
     [Serializable]
     public class NpcData
     {
+        public string name;
+        public string race;
+        public string alignment;
+        public string stats;
         public string description;
         public string plot_hook;
         public string occupation;
