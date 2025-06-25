@@ -143,7 +143,7 @@ public class NpcSaver : MonoBehaviour
                 if (File.Exists(fontPath))
                 {
                     BaseFont baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                    fancyFont = new iTextSharp.text.Font(baseFont, 12);
+                    fancyFont = new iTextSharp.text.Font(baseFont, 20);
                 }
                 else
                 {
