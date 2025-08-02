@@ -10,6 +10,8 @@ using iTextSharp.text.pdf;
 
 public class NpcSaver : MonoBehaviour
 {
+    public NpcHistoryPanel historyPanel;
+
     [Header("UI References")]
     public TMP_InputField nameInput;
     public TMP_InputField descriptionInput;
@@ -23,19 +25,6 @@ public class NpcSaver : MonoBehaviour
     public TMP_InputField inventoryInput;
     public TMP_InputField quoteInput;
     public TMP_InputField backstoryInput;
-
-    private string saveFolder;
-
-    public NpcHistoryPanel historyPanel;
-
-    private void Awake()
-    {
-        saveFolder = Path.Combine(Application.persistentDataPath, "NPCs");
-        if (!Directory.Exists(saveFolder))
-        {
-            Directory.CreateDirectory(saveFolder);
-        }
-    }
 
     [System.Serializable]
     public class NpcData
@@ -54,67 +43,73 @@ public class NpcSaver : MonoBehaviour
         public string backstory;
     }
 
-    public void SaveAsJson()
+    private void Start()
     {
-        var npc = CollectNpcData();
-
-        string json = JsonUtility.ToJson(npc, true);
-        string fileName = $"npc_{System.DateTime.Now:yyyyMMdd_HHmmss}.json";
-        string fullPath = Path.Combine(saveFolder, fileName);
-
-        File.WriteAllText(fullPath, json);
-        Debug.Log($"NPC saved to: {fullPath}");
+        DebugFontFileCheck();
     }
+
+    public void DebugFontFileCheck()
+    {
+        string fontPath = Path.Combine(Application.streamingAssetsPath, "FantaisieArtistique.ttf");
+        string logPath = Path.Combine(Application.persistentDataPath, "font_debug_log.txt");
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine("Font path: " + fontPath);
+
+        if (File.Exists(fontPath))
+        {
+            long size = new FileInfo(fontPath).Length;
+            string message = $"Font file exists! Size: {size} bytes";
+            Debug.Log(message);
+            sb.AppendLine(message);
+        }
+        else
+        {
+            string message = "Font file NOT found!";
+            Debug.LogError(message);
+            sb.AppendLine(message);
+        }
+
+        try
+        {
+            File.WriteAllText(logPath, sb.ToString());
+            Debug.Log("Debug log saved to: " + logPath);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Failed to write debug log: " + ex.Message);
+        }
+    }
+
 
     public void SaveNpcWithFileDialog()
     {
         var npc = CollectNpcData();
 
-        var extensions = new[] {
-            new ExtensionFilter("Text or PDF", "txt", "pdf"),
-            new ExtensionFilter("Text Files", "txt"),
+        var extensions = new[]
+        {
             new ExtensionFilter("PDF Files", "pdf"),
             new ExtensionFilter("All Files", "*")
         };
 
-        string defaultName = $"npc_{System.DateTime.Now:yyyyMMdd_HHmmss}";
-        string path = StandaloneFileBrowser.SaveFilePanel("Save NPC", saveFolder, defaultName, extensions);
+        string cleanName = nameInput?.text?.Trim();
+        string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+
+        string defaultName = string.IsNullOrWhiteSpace(cleanName)
+            ? $"npc_{timestamp}"
+            : $"npc_{SanitizeFileName(cleanName)}_{DateTime.Now:yyyyMMdd}";
+
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        string path = StandaloneFileBrowser.SaveFilePanel("Save NPC", desktopPath, defaultName, extensions);
 
         if (!string.IsNullOrEmpty(path))
         {
-            if (path.EndsWith(".txt"))
+            if (!path.EndsWith(".pdf"))
             {
-                SaveNpcAsTxt(npc, path);
+                path += ".pdf"; //Force .pdf extension if omitted
             }
-            else if (path.EndsWith(".pdf"))
-            {
-                SaveNpcAsPdf(npc, path);
-            }
-            else
-            {
-                Debug.LogWarning("Unsupported file type.");
-            }
+            SaveNpcAsPdf(npc, path);
         }
-    }
-
-    private void SaveNpcAsTxt(NpcData npc, string path)
-    {
-        var sb = new StringBuilder();
-        AppendField(sb, "Name", npc.name);
-        AppendField(sb, "Description", npc.description);
-        AppendField(sb, "Plot Hook", npc.plot_hook);
-        AppendField(sb, "Occupation", npc.occupation);
-        AppendField(sb, "Race", npc.race);
-        AppendField(sb, "Alignment", npc.alignment);
-        AppendField(sb, "Stats", npc.stats);
-        AppendField(sb, "Appearance", npc.appearance);
-        AppendField(sb, "Personality", npc.personality);
-        AppendField(sb, "Inventory", npc.inventory);
-        AppendField(sb, "Quote", npc.quote);
-        AppendField(sb, "Backstory", npc.backstory);
-
-        File.WriteAllText(path, sb.ToString());
-        Debug.Log($"NPC saved as TXT to: {path}");
     }
 
     private void SaveNpcAsPdf(NpcData npc, string path)
@@ -123,38 +118,65 @@ public class NpcSaver : MonoBehaviour
         {
             using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                // Set margins: left, right, top, bottom
                 var doc = new Document(PageSize.A4, 80f, 80f, 185f, 100f);
                 var writer = PdfWriter.GetInstance(doc, fs);
 
-                // Add scroll background
                 string backgroundPath = Path.Combine(Application.streamingAssetsPath, "PDFBackground.png");
+                Debug.Log($"Loading background: {backgroundPath}");
+
                 if (File.Exists(backgroundPath))
                 {
                     writer.PageEvent = new ScrollBackground(backgroundPath);
                 }
+                else
+                {
+                    Debug.LogWarning("PDF background not found.");
+                }
 
                 doc.Open();
 
-                // Load custom TTF font
-                string fontPath = Path.Combine(Application.streamingAssetsPath, "FantaisieArtistique.ttf");
+                string fontPath = Path.Combine(Application.streamingAssetsPath, "GreatVibes-Regular.ttf");
                 iTextSharp.text.Font fancyFont;
 
                 if (File.Exists(fontPath))
                 {
-                    BaseFont baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                    fancyFont = new iTextSharp.text.Font(baseFont, 20);
+                    try
+                    {
+                        BaseFont baseFont = BaseFont.CreateFont(
+                            fontPath,
+                            BaseFont.IDENTITY_H,
+                            BaseFont.EMBEDDED
+                        );
+                        fancyFont = new iTextSharp.text.Font(baseFont, 19);
+                        Debug.Log("Custom font loaded: Great Vibes");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError("Failed to load Great Vibes: " + ex);
+                        fancyFont = FontFactory.GetFont("Arial", 19, iTextSharp.text.Font.NORMAL);
+                    }
                 }
                 else
                 {
-                    Debug.LogWarning("Custom font not found, falling back to Arial.");
-                    fancyFont = FontFactory.GetFont("Arial", 12, iTextSharp.text.Font.NORMAL);
+                    Debug.LogWarning("Great Vibes font not found, using Arial.");
+                    fancyFont = FontFactory.GetFont("Arial", 19, iTextSharp.text.Font.NORMAL);
                 }
+
 
                 void AddPdfParagraph(string label, string value)
                 {
+                    value = CleanText(value);
                     if (!string.IsNullOrWhiteSpace(value))
-                        doc.Add(new Paragraph($"{label}: {value}", fancyFont));
+                    {
+                        try
+                        {
+                            doc.Add(new Paragraph($"{label}: {value}", fancyFont));
+                        }
+                        catch (DocumentException ex)
+                        {
+                            Debug.LogWarning($"Could not add paragraph '{label}': {ex.Message}");
+                        }
+                    }
                 }
 
                 AddPdfParagraph("Name", npc.name);
@@ -176,16 +198,22 @@ public class NpcSaver : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"PDF save failed: {ex.Message}");
+            Debug.LogError($"PDF save failed: {ex}");
         }
     }
 
-    private void AppendField(StringBuilder sb, string fieldName, string value)
+    private string CleanText(string input)
     {
-        if (!string.IsNullOrWhiteSpace(value))
-        {
-            sb.AppendLine($"{fieldName}: {value}");
-        }
+        if (string.IsNullOrEmpty(input)) return input;
+        input = input.Replace("\u200B", "");     //Zero-width space
+        input = input.Replace("\u25A1", "[ ]");  //White square fallback
+        return input;
+    }
+
+    private string SanitizeFileName(string input)
+    {
+        var invalids = Path.GetInvalidFileNameChars();
+        return string.Join("_", input.Split(invalids, StringSplitOptions.RemoveEmptyEntries)).Trim();
     }
 
     private NpcData CollectNpcData()
@@ -207,10 +235,29 @@ public class NpcSaver : MonoBehaviour
         };
     }
 
+    public void SaveAsJson()
+    {
+        var npc = CollectNpcData();
+
+        string saveFolder = Path.Combine(Application.persistentDataPath, "NPCs");
+        if (!Directory.Exists(saveFolder))
+            Directory.CreateDirectory(saveFolder);
+
+        string fileName = $"npc_{System.DateTime.Now:yyyyMMdd_HHmmss}.json";
+        string fullPath = Path.Combine(saveFolder, fileName);
+
+        string json = JsonUtility.ToJson(npc, true);
+        File.WriteAllText(fullPath, json);
+        Debug.Log($"NPC saved to: {fullPath}");
+    }
+
     public IEnumerator SaveJsonAfterDelay(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         SaveAsJson();
-        historyPanel.LoadRecentNpcButtons();
+        if (historyPanel != null)
+        {
+            historyPanel.LoadRecentNpcButtons();
+        }
     }
 }

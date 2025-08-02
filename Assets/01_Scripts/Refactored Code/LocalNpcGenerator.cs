@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI; // For Toggle
+using UnityEngine.UI;
 
 public class LocalNpcGenerator : MonoBehaviour
 {
+    public GeneratorSetup generatorSetup;
+
     [Header("Input Fields")]
     public TMP_InputField raceInput;
     public TMP_InputField alignmentInput;
@@ -14,8 +16,6 @@ public class LocalNpcGenerator : MonoBehaviour
     public Toggle lockRaceToggle;
     public Toggle lockAlignmentToggle;
     public Toggle lockStatsToggle;
-
-    public GeneratorSetup generatorSetup; // Assign in inspector
 
     private List<string> races = new List<string>
     {

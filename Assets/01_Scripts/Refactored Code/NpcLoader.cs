@@ -3,18 +3,16 @@ using TMPro;
 
 public class NpcLoader : MonoBehaviour
 {
+    public MenuManager menuManager;
+    public GeneratorSetup genSetup;
+
     public GameObject generatorPanel;
+    public GameObject setupPanel;
 
     public TMP_InputField nameInput, descriptionInput, plotHookInput;
     public TMP_InputField occupationInput, raceInput, alignmentInput, statsInput;
     public TMP_InputField appearanceInput, personalityInput, inventoryInput;
     public TMP_InputField quoteInput, backstoryInput;
-
-    public MenuManager menuManager;
-
-    public GeneratorSetup genSetup;
-
-    public GameObject setupPanel;
 
     public void LoadNpc(NpcApiClient.NpcData npc)
     {

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class NpcUIManager : MonoBehaviour
 {
+    public NpcApiClient npcApiClient;
+
     [Header("UI Fields")]
     public TMP_InputField descriptionInput;
     public TMP_InputField plotHookInput;
@@ -23,8 +25,6 @@ public class NpcUIManager : MonoBehaviour
     public Toggle lockInventoryToggle;
     public Toggle lockQuoteToggle;
     public Toggle lockBackstoryToggle;
-
-    public NpcApiClient npcApiClient;
 
     private void OnEnable()
     {

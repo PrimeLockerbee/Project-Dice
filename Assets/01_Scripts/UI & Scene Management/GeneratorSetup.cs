@@ -58,38 +58,38 @@ public class GeneratorSetup : MonoBehaviour
         { backstoryToggle, backstoryInputField }
         };
 
-        // Clear any previous listeners to avoid duplicates
+        //Clear any previous listeners to avoid duplicates
         foreach (var toggle in toggleToInputField.Keys)
         {
             toggle.onValueChanged.RemoveAllListeners();
 
             toggle.onValueChanged.AddListener((isOn) =>
             {
-                // Show or hide the linked input field based on toggle
+                //Show or hide the linked input field based on toggle
                 toggleToInputField[toggle].SetActive(isOn);
 
-                // Update the continue button's interactability
+                //Update the continue button's interactability
                 UpdateContinueButton();
             });
 
-            // Initialize input field visibility based on toggle state
+            //Initialize input field visibility based on toggle state
             toggleToInputField[toggle].SetActive(toggle.isOn);
         }
 
-        // Set continue button interactability on startup
+        //Set continue button interactability on startup
         UpdateContinueButton();
     }
 
 
     public void OnContinue()
     {
-        // Hide setup panel
+        //Hide setup panel
         setupPanel.SetActive(false);
 
-        // Show generator panel
+        //Show generator panel
         generatorPanel.SetActive(true);
 
-        // Enable or disable InputFields based on toggle state
+        //Enable or disable InputFields based on toggle state
         foreach (var pair in toggleToInputField)
         {
             pair.Value.SetActive(pair.Key.isOn);
@@ -125,13 +125,13 @@ public class GeneratorSetup : MonoBehaviour
         quoteToggle.isOn = !string.IsNullOrWhiteSpace(npc.quote);
         backstoryToggle.isOn = !string.IsNullOrWhiteSpace(npc.backstory);
 
-        // Force-refresh input fields visibility
+        //Force-refresh input fields visibility
         foreach (var pair in toggleToInputField)
         {
             pair.Value.SetActive(pair.Key.isOn);
         }
 
-        // Update continue button just in case
+        //Update continue button just in case
         UpdateContinueButton();
     }
 

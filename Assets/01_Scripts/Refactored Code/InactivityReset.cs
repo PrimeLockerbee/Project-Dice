@@ -4,15 +4,16 @@ using UnityEngine.SceneManagement;
 
 public class InactivityReset : MonoBehaviour
 {
-    public float timeoutSeconds = 30f;
-    public GameObject inactivityWindow; // Assign your UI panel here
+    public GameObject inactivityWindow;
 
+    public float timeoutSeconds = 30f;
     private float timer;
+
     private bool windowShown = false;
 
     void Update()
     {
-        if (windowShown) return; // Don't track input while window is open
+        if (windowShown) return; //Don't track input while window is open
 
         bool isActive = false;
 
@@ -67,7 +68,6 @@ public class InactivityReset : MonoBehaviour
         }
     }
 
-    // Call this from the "Yes" button
     public void ContinueSession()
     {
         if (inactivityWindow != null)
@@ -78,9 +78,8 @@ public class InactivityReset : MonoBehaviour
         timer = 0f;
     }
 
-    // Call this from the "No" button
     public void RestartSession()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(0);
     }
 }

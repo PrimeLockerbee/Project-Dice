@@ -7,10 +7,10 @@ public class NpcApiClient : MonoBehaviour
 {
     public string apiUrl = "https://studenthome.hku.nl/~bradley.vanewijk/get_npc.php";
 
-    // Define a public event for when NPC data is received
+    //Public event for when NPC data is received
     public event Action<NpcData> OnNpcDataReceived;
 
-    // Define a simple data container class to hold NPC fields
+    //Simple data container class to hold NPC fields
     [Serializable]
     public class NpcData
     {
@@ -28,7 +28,7 @@ public class NpcApiClient : MonoBehaviour
         public string backstory;
     }
 
-    // Call this method to request NPC data from your API
+    //Method to request NPC data from API
     public void RequestNpcData(string fields = "description,plot_hook,occupation")
     {
         StartCoroutine(FetchNpcData(fields));

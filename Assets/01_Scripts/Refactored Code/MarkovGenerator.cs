@@ -14,10 +14,12 @@ public class MarkovGenerator
         rng = seed.HasValue ? new Random(seed.Value) : new Random();
     }
 
+    //Builds the Markov chain based on input names
     public void Train(IEnumerable<string> names)
     {
         foreach (var name in names)
         {
+            //Pad with underscores for start and end markers
             string padded = new string('_', order) + name + "_";
 
             for (int i = 0; i <= padded.Length - order - 1; i++)
@@ -33,9 +35,10 @@ public class MarkovGenerator
         }
     }
 
+    //Generates a new name based on the trained Markov chain
     public string Generate(int maxLength = 10)
     {
-        string current = new string('_', order);
+        string current = new string('_', order); //Start with padding
         StringBuilder result = new StringBuilder();
 
         while (result.Length < maxLength)
@@ -44,15 +47,16 @@ public class MarkovGenerator
 
             var options = chain[current];
             char next = options[rng.Next(options.Count)];
-            if (next == '_') break;
+            if (next == '_') break; //End of name
 
             result.Append(next);
-            current = current.Substring(1) + next;
+            current = current.Substring(1) + next; // shift window
         }
 
         return Capitalize(result.ToString());
     }
 
+    //Capitalizes the first letter of the generated name
     private string Capitalize(string input) =>
         string.IsNullOrEmpty(input) ? "" : char.ToUpper(input[0]) + input.Substring(1);
 }

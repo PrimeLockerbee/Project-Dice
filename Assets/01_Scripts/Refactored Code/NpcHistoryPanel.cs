@@ -7,9 +7,9 @@ using System.Linq;
 
 public class NpcHistoryPanel : MonoBehaviour
 {
-    public GameObject buttonPrefab; // Assign a prefab with a Button + TMP_Text
-    public Transform buttonParent;  // UI container for the buttons
-    public NpcLoader npcLoader;     // Reference to your script that fills the generator fields
+    public GameObject buttonPrefab;
+    public Transform buttonParent;
+    public NpcLoader npcLoader;
 
     private string npcFolder;
 
@@ -21,7 +21,7 @@ public class NpcHistoryPanel : MonoBehaviour
 
     public void LoadRecentNpcButtons()
     {
-        // Clear old buttons
+        //Clear old buttons
         foreach (Transform child in buttonParent)
         {
             Destroy(child.gameObject);
@@ -44,7 +44,7 @@ public class NpcHistoryPanel : MonoBehaviour
             CreateButton(nameToShow, npc, time);
         }
 
-        // ✅ Force layout update after buttons are added
+        //Force layout update after buttons are added
         LayoutRebuilder.ForceRebuildLayoutImmediate(buttonParent.GetComponent<RectTransform>());
     }
 
@@ -54,7 +54,7 @@ public class NpcHistoryPanel : MonoBehaviour
         var buttonGO = Instantiate(buttonPrefab, buttonParent);
         var buttonText = buttonGO.GetComponentInChildren<TMP_Text>();
 
-        // Add rich text with smaller font size for time
+        //Add rich text with smaller font size for time
         buttonText.text = $"Name: {name}\n<size=70%>{timestamp}</size>";
 
         buttonGO.GetComponent<Button>().onClick.AddListener(() =>
@@ -94,7 +94,7 @@ public class NpcHistoryPanel : MonoBehaviour
             File.Delete(file);
         }
 
-        // Refresh the UI after deletion
+        //Refresh the UI after deletion
         ClearCurrentHistory();
     }
 }

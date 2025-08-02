@@ -13,7 +13,7 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
-        ShowOnly("MainMenu"); // or "Setup" or whatever your starting panel id is
+        ShowOnly("MainMenu");
     }
 
     public void ShowOnly(string idToShow)

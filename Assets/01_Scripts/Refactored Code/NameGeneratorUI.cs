@@ -5,14 +5,13 @@ using UnityEngine.UI;
 
 public class NameGeneratorUI : MonoBehaviour
 {
-    public TMP_InputField nameInputField;
-    public TextAsset trainingData; // e.g., a text file with fantasy names
-
     private MarkovGenerator generator;
+    public GeneratorSetup generatorSetup;
+
+    public TMP_InputField nameInputField;
+    public TextAsset trainingData; //A text file with names to train
 
     public Toggle lockNameToggle;
-
-    public GeneratorSetup generatorSetup; // Assign in inspector
 
     private void Start()
     {
@@ -25,10 +24,10 @@ public class NameGeneratorUI : MonoBehaviour
     {
         if (generator == null) return;
 
-        // Only generate if name toggle is ON in the setup
+        //Only generate if name toggle is ON in the setup
         if (!generatorSetup.nameToggle.isOn)
         {
-            nameInputField.text = ""; // Optionally clear if not generating
+            nameInputField.text = ""; //Optionally clear if not generating
             return;
         }
 

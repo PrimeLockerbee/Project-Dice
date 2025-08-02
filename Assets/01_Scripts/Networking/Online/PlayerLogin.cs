@@ -48,42 +48,37 @@ public class PlayerLogin : MonoBehaviour
                 {
                     Debug.Log("Player Login successful");
 
-                    // Assuming the response string contains the id, nickname, and session id separated by newlines
+                    //Assuming the response string contains the id, username, and session id separated by newlines
                     string[] lines = response.Split('\n');
 
                     if (lines.Length >= 3)
                     {
                         string id = lines[0];
-                        string nickname = lines[1];
+                        string username = lines[1];
                         string sessionId = lines[2];
 
 
-                        // Store the variables in PlayerPrefs
-                        PlayerPrefs.SetString("ID", id);
-                        Debug.Log("Player ID stored: " + PlayerPrefs.GetString("ID"));
-                        PlayerPrefs.SetString("Nickname", nickname);
+                        PlayerPrefs.SetString("Username", username);
 
                         PlayerPrefs.SetString("SessionID", sessionId);
 
-                        // Now you can use the variables as needed
                         Debug.Log("ID: " + id);
-                        Debug.Log("Nickname: " + nickname);
-                        Debug.Log("Session ID: " + sessionId);
+                        Debug.Log("Username: " + username);
+                        Debug.Log("SessionId: " + sessionId);
                     }
                     else
                     {
                         Debug.LogError("Invalid response format");
                     }
 
-                    // Perform any actions required upon successful player login
-                    //SceneManager.LoadScene(1);
+                    //Perform any actions required upon successful player login
                     accesPanel.SetActive(true);    
 
                 }
                 else
                 {
                     Debug.Log("Player login failed");
-                    // Perform any actions required upon failed player login
+                    //Perform any actions required upon failed player login
                 }
             }
         }

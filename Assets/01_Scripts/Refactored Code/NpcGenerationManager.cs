@@ -14,30 +14,31 @@ public class NpcGenerationManager : MonoBehaviour
     public NpcSaver npcSaver;
     public GeneratorSetup generatorSetup;
     public NameGeneratorUI nameGenerator;
+
     public float saveDelaySeconds = 1f;
 
     public Button _button;
 
     public void GenerateNpc()
     {
-        // 1. Generate local fields
+        //Generate local fields
         localGenerator.GenerateAll();
         nameGenerator.GenerateName();
 
-        // 2. Generate API-based fields
+        //Generate API-based fields
         string fields = BuildRequestedFields();
         apiClient.RequestNpcData(fields);
 
-        // 2.5 Disable Generate Button for x amount of seconds
+        //Disable Generate Button for x amount of seconds
         StartCoroutine(DisableButtonTemporarily(_button, 3));
 
-        // 3. Save after delay (so the inputs are filled first)
+        //Save after delay (so the inputs are filled first)
         StartCoroutine(npcSaver.SaveJsonAfterDelay(saveDelaySeconds));
     }
 
     private string BuildRequestedFields()
     {
-        // Determine which API fields to request based on active toggles
+        //Determine which API fields to request based on active toggles
         var requested = new System.Collections.Generic.List<string>();
 
         if (generatorSetup.descriptionToggle.isOn) requested.Add("description");
